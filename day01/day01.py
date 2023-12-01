@@ -2,8 +2,8 @@ import re
 
 
 class Figures:
-    figure_texts = ('zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine')
     mapping = {digit: int(digit) for digit in '0123456789'}  # '1' => 1
+    figure_texts = ('zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine')
     mapping.update({figure_text: value for value, figure_text in enumerate(figure_texts)})  # 'one' => 1
     pattern = '|'.join(mapping.keys())
     first_re = re.compile(rf'({pattern})')
