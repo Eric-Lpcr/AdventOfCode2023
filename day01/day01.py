@@ -11,8 +11,8 @@ class Figures:
 
     @classmethod
     def compute_calibration_value(cls, line):
-        first_figure = re.search(Figures.first_re, line).group(0)
-        last_figure = re.search(Figures.last_re, line).group(1)
+        first_figure = re.search(cls.first_re, line).group(0)
+        last_figure = re.search(cls.last_re, line).group(1)
         return cls.mapping[first_figure] * 10 + cls.mapping[last_figure]
 
 
