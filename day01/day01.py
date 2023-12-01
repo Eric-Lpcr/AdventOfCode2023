@@ -2,22 +2,23 @@ import re
 
 
 class Figures:
-    texts = ('zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine')
-    mapping = {str(digit): digit for digit in range(10)}  # '1' => 1
-    mapping.update({figure: index for index, figure in enumerate(texts)})  # 'one' => 1
+    figure_texts = ('zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine')
+    mapping = {digit: int(digit) for digit in '0123456789'}  # '1' => 1
+    mapping.update({figure_text: value for value, figure_text in enumerate(figure_texts)})  # 'one' => 1
     pattern = '|'.join(mapping.keys())
     first_re = re.compile(rf'({pattern})')
     last_re = re.compile(rf'(?s:.*)({pattern})')
 
     @classmethod
-    def value_of(cls, text):
-        return cls.mapping[text]
+    def compute_calibration_value(cls, line):
+        first_figure = re.search(Figures.first_re, line).group(0)
+        last_figure = re.search(Figures.last_re, line).group(1)
+        return cls.mapping[first_figure] * 10 + cls.mapping[last_figure]
 
 
 def compute_calibration_value(line):
-    first_figure = re.search(Figures.first_re, line).group(0)
-    last_figure = re.search(Figures.last_re, line).group(1)
-    return Figures.value_of(first_figure) * 10 + Figures.value_of(last_figure)
+    digits = list(map(int, filter(str.isdigit, line)))
+    return digits[0] * 10 + digits[-1]
 
 
 def solve_problem(filename, expected1=None, expected2=None):
@@ -27,14 +28,13 @@ def solve_problem(filename, expected1=None, expected2=None):
         input_data = f.readlines()
 
     if expected1 is not None:
-        digits = [list(map(int, filter(str.isdigit, list(line)))) for line in input_data]
-        calibration_values = [digit[0] * 10 + digit[-1] for digit in digits]
+        calibration_values = map(compute_calibration_value, input_data)
         result1 = sum(calibration_values)
         print(f"Part 1: calibration values sum is {result1}")
         assert result1 == expected1
 
     if expected2 is not None:
-        calibration_values = map(compute_calibration_value, input_data)
+        calibration_values = map(Figures.compute_calibration_value, input_data)
         result2 = sum(calibration_values)
         print(f"Part 2: calibration values sum is {result2}")
         assert result2 == expected2
