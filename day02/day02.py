@@ -60,7 +60,7 @@ def solve_problem(filename, expected1=None, expected2=None):
     print(f'--------- {filename}')
 
     with open(filename) as f:
-        games = list(Game.decode(line) for line in f.readlines())
+        games = list(Game.decode(line.strip()) for line in f.readlines())
 
     bag = GameSet(red_cubes=12, green_cubes=13, blue_cubes=14)
     result1 = sum(game.game_id for game in games if game.is_possible(bag))
