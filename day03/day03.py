@@ -9,16 +9,19 @@ def has_symbol(text):
     return any(c != '.' and not c.isdigit() for c in text)
 
 
+GEAR_SYMBOL = '*'
+
+
 def gear_position(text):
     if '*' in text:
-        return text.index('*')
+        return text.index(GEAR_SYMBOL)
     else:
         return None
 
 
 def get_part_numbers(lines):
     part_numbers = deque()
-    gears = defaultdict(set)
+    gears = defaultdict(list)
     part_number_re = re.compile(r'(\d+)')
 
     empty_line = '.' * (len(lines[0]) + 2)
@@ -41,16 +44,16 @@ def get_part_numbers(lines):
             else:
                 logging.debug(f'Rejected {part_number} on line {index}')
 
-            if before == '*':
-                gears[(index, start-1)].add(part_number)
-            if after == '*':
-                gears[(index, end)].add(part_number)
+            if before == GEAR_SYMBOL:
+                gears[(index, start-1)].append(part_number)
+            if after == GEAR_SYMBOL:
+                gears[(index, end)].append(part_number)
             gear_pos = gear_position(previous_line)
             if gear_pos is not None:
-                gears[(index-1, start-1+gear_pos)].add(part_number)
+                gears[(index-1, start-1+gear_pos)].append(part_number)
             gear_pos = gear_position(next_line)
             if gear_pos is not None:
-                gears[(index+1, start-1+gear_pos)].add(part_number)
+                gears[(index+1, start-1+gear_pos)].append(part_number)
 
     return part_numbers, gears
 
