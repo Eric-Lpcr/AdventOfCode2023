@@ -5,9 +5,9 @@ class CalibrationDecoder:
     figure_mapping = {digit: int(digit) for digit in '0123456789'}  # '1' => 1
     figure_texts = ('zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine')
     figure_mapping.update({figure_text: value for value, figure_text in enumerate(figure_texts)})  # 'one' => 1
-    pattern = '|'.join(figure_mapping.keys())
-    first_re = re.compile(rf'({pattern})')
-    last_re = re.compile(rf'(?s:.*)({pattern})')
+    figure_regex = '|'.join(figure_mapping.keys())
+    first_pattern = re.compile(rf'({figure_regex})')
+    last_pattern = re.compile(rf'(?s:.*)({figure_regex})')
 
     @staticmethod
     def decode_digits(line):
@@ -16,8 +16,8 @@ class CalibrationDecoder:
 
     @classmethod
     def decode_figures(cls, line):
-        first_figure = re.search(cls.first_re, line).group(0)
-        last_figure = re.search(cls.last_re, line).group(1)
+        first_figure = cls.first_pattern.search(line).group(1)
+        last_figure = cls.last_pattern.search(line).group(1)
         return cls.figure_mapping[first_figure] * 10 + cls.figure_mapping[last_figure]
 
 
@@ -25,7 +25,7 @@ def solve_problem(filename, expected1=None, expected2=None):
     print(f'--------- {filename}')
 
     with open(filename) as f:
-        input_data = f.readlines()
+        input_data = [line.strip() for line in f.readlines()]
 
     if expected1 is not None:
         calibration_values = map(CalibrationDecoder.decode_digits, input_data)
