@@ -12,9 +12,10 @@ def has_symbol(text):
 GEAR_SYMBOL = '*'
 
 
-def gear_position(text):
-    if '*' in text:
-        return text.index(GEAR_SYMBOL)
+def str_index(string, sub_string):
+    """Same as str.index, but returns None instead of raising exception"""
+    if sub_string in string:
+        return string.index(sub_string)
     else:
         return None
 
@@ -48,12 +49,12 @@ def get_part_numbers(lines):
                 gears[(index, start-1)].append(part_number)
             if after == GEAR_SYMBOL:
                 gears[(index, end)].append(part_number)
-            gear_pos = gear_position(previous_line)
-            if gear_pos is not None:
-                gears[(index-1, start-1+gear_pos)].append(part_number)
-            gear_pos = gear_position(next_line)
-            if gear_pos is not None:
-                gears[(index+1, start-1+gear_pos)].append(part_number)
+            gear_index = str_index(previous_line, GEAR_SYMBOL)
+            if gear_index is not None:
+                gears[(index-1, start-1+gear_index)].append(part_number)
+            gear_index = str_index(next_line, GEAR_SYMBOL)
+            if gear_index is not None:
+                gears[(index+1, start-1+gear_index)].append(part_number)
 
     return part_numbers, gears
 
