@@ -17,10 +17,10 @@ apply the transformation on right places.
 Took a bit to set it working, but like often in Python, once some few points corrected, it works on test data and... 
 suspense... on input data too! 
 
-# Capitalisation
+## Capitalisation
 in [utilities/range.py](../utilities/range.py)
 
-## `Range` 
+### `Range` 
 A class with more interval operations than built-in `range`. 
 
 Especially the `cut` method which cuts the current range in pieces according to another range. 
@@ -31,5 +31,5 @@ For example:
 
 gives a `MultiRange` with value [0, 5[ U [5, 7[ U [7, 10[
 
-## `MultiRange` 
+### `MultiRange` 
 A class to handle a union of `Range`.
