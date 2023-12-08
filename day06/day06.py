@@ -1,4 +1,4 @@
-from math import prod, sqrt
+from math import prod, sqrt, floor, ceil
 
 
 def quadratic_roots(a, b, c):
@@ -28,10 +28,8 @@ class Race:
         # second degree equation... a<0 so polynom is positive between roots
         root1, root2 = quadratic_roots(-1, self.time, -self.record)
 
-        hold_time1 = int(root1 + 1)  # first int after root1
-        hold_time2 = int(root2)  # first int before root2
-        if hold_time2 == root2:  # but not root2
-            hold_time2 -= 1
+        hold_time1 = floor(root1) + 1  # first int after root1
+        hold_time2 = ceil(root2) - 1  # first int before root2
         return hold_time2 - hold_time1 + 1
 
 
